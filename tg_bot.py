@@ -47,6 +47,12 @@ def check_answer(update: Update, context: CallbackContext):
         update.message.reply_text(text)
 
 
+def give_up(update: Update, context: CallbackContext):
+    question, answer = context.chat_data["current_quiz"]
+    update.message.reply_text(f"Правильный ответ: {answer}")
+    return send_question(update, context)
+
+
 def main():
     env = Env()
     env.read_env()
@@ -71,7 +77,10 @@ def main():
     question_conversation = ConversationHandler(
         entry_points=[MessageHandler(Filters.regex(r"^Новый вопрос$"), send_question)],
         states={
-            ANSWERING: [MessageHandler(Filters.text & ~Filters.command, check_answer)]
+            ANSWERING: [
+                MessageHandler(Filters.regex(r"^Сдаться$"), give_up),
+                MessageHandler(Filters.text & ~Filters.command, check_answer),
+            ]
         },
         fallbacks=[CommandHandler("cancel", start)]
     )
