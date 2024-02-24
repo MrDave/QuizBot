@@ -2,15 +2,10 @@ from telegram import Update, ForceReply, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Updater, CallbackContext, MessageHandler, CommandHandler, Filters, ConversationHandler
 from environs import Env
 from random import choice
-from quiz_handlers import dictify_questions
+from quiz_handlers import assemble_questionnaire
 import redis
 
 ANSWERING = 0
-
-
-def echo(update: Update, context: CallbackContext):
-    text = update.message.text
-    update.message.reply_text(text)
 
 
 def start(update: Update, context: CallbackContext):
@@ -66,7 +61,7 @@ def main():
     dp = updater.dispatcher
     with open("quiz_questions/ars12.txt", encoding="KOI8-R") as file:
         text = file.read()
-    dp.bot_data["questionnaire"] = dictify_questions(text)
+    dp.bot_data["questionnaire"] = assemble_questionnaire(text)
     dp.bot_data["redis"] = redis.Redis(
         host=redis_host,
         port=redis_port,
@@ -86,8 +81,6 @@ def main():
     )
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(question_conversation)
-    # dp.add_handler(MessageHandler(Filters.regex(r"^Новый вопрос$"), send_question))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     updater.start_polling()
     updater.idle()
