@@ -1,11 +1,17 @@
-from telegram import Update, ForceReply, KeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import Updater, CallbackContext, MessageHandler, CommandHandler, Filters, ConversationHandler
-from environs import Env
+import logging
 from random import choice
-from quiz_handlers import assemble_questionnaire
+
 import redis
+from environs import Env
+from telegram import Update, ReplyKeyboardMarkup, Bot
+from telegram.ext import Updater, CallbackContext, MessageHandler, CommandHandler, Filters, ConversationHandler
+
+from quiz_handlers import assemble_questionnaire
+from telegram_logging import TelegramLogsHandler
 
 ANSWERING = 0
+
+logger = logging.getLogger()
 
 
 def start(update: Update, context: CallbackContext):
@@ -53,9 +59,17 @@ def main():
     env.read_env()
 
     bot_token = env.str("TELEGRAM_BOT_TOKEN")
-    redis_host = env.str("REDIS_HOST", "localhost")
-    redis_port = env.str("REDIS_PORT", 6379)
+    redis_host = env.str("REDIS_HOST")
+    redis_port = env.str("REDIS_PORT")
     redis_password = env.str("REDIS_PASSWORD")
+
+    logger_bot = Bot(token=env.str("TELEGRAM_LOGGING_BOT_TOKEN"))
+    chat_id = env.str("TELEGRAM_USER_ID")
+
+    logger.setLevel(env.str("LOGGING_LEVEL", logging.WARNING))
+    logger.addHandler(TelegramLogsHandler(logger_bot, "Telegram Quiz Bot", chat_id))
+
+    logger.info("Telegram bot started")
 
     updater = Updater(token=bot_token)
     dp = updater.dispatcher

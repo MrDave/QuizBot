@@ -1,12 +1,18 @@
 import random
+import logging
 
 import vk_api as vk
 from environs import Env
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import redis
+from telegram import Bot
 
 from quiz_handlers import assemble_questionnaire
+from telegram_logging import TelegramLogsHandler
+
+
+logger = logging.getLogger()
 
 
 def start(event, vk_api):
@@ -62,6 +68,7 @@ def give_correct_answer(event, vk_api, redis_db):
         random_id=random.randint(1, 1000)
     )
 
+
 def main():
     env = Env()
     env.read_env()
@@ -70,8 +77,16 @@ def main():
     vk_session = vk.VkApi(token=vk_token)
     vk_api = vk_session.get_api()
 
-    redis_host = env.str("REDIS_HOST", "localhost")
-    redis_port = env.str("REDIS_PORT", 6379)
+    logger_bot = Bot(token=env.str("TELEGRAM_LOGGING_BOT_TOKEN"))
+    chat_id = env.str("TELEGRAM_USER_ID")
+
+    logger.setLevel(env.str("LOGGING_LEVEL", logging.WARNING))
+    logger.addHandler(TelegramLogsHandler(logger_bot, "VK Quiz Bot", chat_id))
+
+    logger.info("VK bot started")
+
+    redis_host = env.str("REDIS_HOST")
+    redis_port = env.str("REDIS_PORT")
     redis_password = env.str("REDIS_PASSWORD")
 
     redis_db = redis.Redis(
@@ -95,6 +110,9 @@ def main():
             elif event.text == "Сдаться":
                 give_correct_answer(event, vk_api, redis_db)
                 send_new_question(event, vk_api, redis_db, questionnaire)
+            elif event.text == "Мой счёт":
+                # TODO: implement counting user's score
+                pass
             else:
                 check_answer(event, vk_api, redis_db)
 
