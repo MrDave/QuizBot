@@ -16,7 +16,7 @@ def start(update: Update, context: CallbackContext):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     update.message.reply_markdown_v2(
-        fr"Hola {user.mention_markdown_v2()}\! I'm your bot for today ❤️",
+        fr"Привет, {user.mention_markdown_v2()}\! Я - твой викторинный бот на сегодня ❤️",
         reply_markup=reply_markup
     )
 
@@ -33,7 +33,7 @@ def send_question(update: Update, context: CallbackContext):
 def check_answer(update: Update, context: CallbackContext):
     question, answer = context.chat_data["current_quiz"]
     user_answer = update.message.text
-    if user_answer in answer.split(".", maxsplit=1):
+    if user_answer.lower() in answer.split(".", maxsplit=1).lower():
         text = "Хорош! Жми на \"Новый вопрос\"!"
         update.message.reply_text(text)
         return ConversationHandler.END
