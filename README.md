@@ -38,10 +38,10 @@ To configure those settings, create a `.env` file in the root folder of the proj
 
 ## How to use
 
-Telegram and VK bots are separate and should be launched by executing `telegram_bot.py` and `vk_bot.py`
+Telegram and VK bots are separate and should be launched by executing `tg_bot.py` and `vk_bot.py`
 
 ```commandline
-python telegram_bot.py  # launches Telegram bot
+python tg_bot.py  # launches Telegram bot
 python vk_bot.py  # launches VK bot
 ```
 
