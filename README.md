@@ -35,6 +35,7 @@ To configure those settings, create a `.env` file in the root folder of the proj
 - `REDIS_PORT` - Port of your redis database
 - `REDIS_PASSWORD` - Password for your redis database
 - `REDIS_DB_NUMBER` - The ID of your redis database
+- `QUIZ_FILE_PATH` - Filepath to your quiz file in `KOI8-R` encoding (see `quiz_questions/example.txt`) 
 
 ## How to use
 

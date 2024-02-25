@@ -73,7 +73,7 @@ def main():
 
     updater = Updater(token=bot_token)
     dp = updater.dispatcher
-    with open("quiz_questions/ars12.txt", encoding="KOI8-R") as file:
+    with open(env.str("QUIZ_FILE_PATH", "quiz_questions/example.txt"), encoding="KOI8-R") as file:
         text = file.read()
     dp.bot_data["questionnaire"] = assemble_questionnaire(text)
     dp.bot_data["redis"] = redis.Redis(

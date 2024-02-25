@@ -96,7 +96,7 @@ def main():
         password=redis_password,
         decode_responses=True)
 
-    with open("quiz_questions/ppp13.txt", encoding="KOI8-R") as f:
+    with open(env.str("QUIZ_FILE_PATH", "quiz_questions/example.txt"), encoding="KOI8-R") as f:
         text = f.read()
     questionnaire = assemble_questionnaire(text)
 

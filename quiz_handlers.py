@@ -9,15 +9,3 @@ def assemble_questionnaire(text: str):
     questionnaire = list(zip(questions, answers))
 
     return questionnaire
-
-
-def main():
-    with open("quiz_questions/plehan17.txt", encoding="KOI8-R") as f:
-        whole_text = f.read()
-
-    questionnaire = assemble_questionnaire(whole_text)
-    print(questionnaire)
-
-
-if __name__ == '__main__':
-    main()
