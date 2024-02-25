@@ -22,7 +22,7 @@ def start(update: Update, context: CallbackContext):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     update.message.reply_markdown_v2(
-        fr"Привет, {user.mention_markdown_v2()}\! Я - твой викторинный бот на сегодня ❤️",
+        fr"Привет, {user.mention_markdown_v2()}\! Я – твой викторинный бот на сегодня ❤️",
         reply_markup=reply_markup
     )
 

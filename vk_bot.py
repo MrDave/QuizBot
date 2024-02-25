@@ -26,7 +26,7 @@ def start(event, vk_api):
 
     vk_api.messages.send(
         user_id=event.user_id,
-        message="Привет! Я - твой викторинный бот на сегодня ❤️",
+        message="Привет! Я – твой викторинный бот на сегодня ❤️",
         random_id=random.randint(1, 1000),
         keyboard=keyboard.get_keyboard(),
     )
