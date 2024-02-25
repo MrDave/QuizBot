@@ -39,7 +39,7 @@ def send_question(update: Update, context: CallbackContext):
 def check_answer(update: Update, context: CallbackContext):
     question, answer = context.chat_data["current_quiz"]
     user_answer = update.message.text
-    if user_answer.lower() in answer.split(".", maxsplit=1).lower():
+    if user_answer.lower() == answer.split(".", maxsplit=1)[0].lower():
         text = "Хорош! Жми на \"Новый вопрос\"!"
         update.message.reply_text(text)
         return ConversationHandler.END
