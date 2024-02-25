@@ -1,7 +1,7 @@
 import re
 
 
-def dictify_questions(text: str):
+def assemble_questionnaire(text: str):
 
     questions = re.findall(r"Вопрос \d+:\s(.*?)\sОтвет", text, re.DOTALL)
     answers = re.findall(r"Ответ:\s(.*?)\.\s\s", text)
@@ -15,7 +15,7 @@ def main():
     with open("quiz_questions/plehan17.txt", encoding="KOI8-R") as f:
         whole_text = f.read()
 
-    questionnaire = dictify_questions(whole_text)
+    questionnaire = assemble_questionnaire(whole_text)
     print(questionnaire)
 
 
